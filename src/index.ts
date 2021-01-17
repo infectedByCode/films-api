@@ -1,5 +1,6 @@
 import express, { Request, Response, NextFunction } from 'express';
 import dotenv from 'dotenv';
+import { db } from './db/db';
 const app = express();
 dotenv.config();
 
