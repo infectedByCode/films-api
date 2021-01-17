@@ -1,0 +1,9 @@
+{
+  "include": ["src"],
+  "output": ["dist"],
+  "compilerOptions": {
+    "strict": true,
+    "noImplicitAny": true,
+    "esModuleInterop": true
+  }
+}
