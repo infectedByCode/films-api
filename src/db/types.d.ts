@@ -5,7 +5,7 @@ interface Film {
   title: string;
   description: string;
   year: number;
-  keywords: string[];
+  keywords: string;
 }
 
 interface User {
@@ -24,6 +24,6 @@ declare module 'knex/types/tables' {
   interface Tables {
     films: Film;
     users: User;
-    user_cred: UserCredentials;
+    user_creds: UserCredentials;
   }
 }

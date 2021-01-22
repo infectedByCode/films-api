@@ -4,6 +4,7 @@
   "description": "An API that allows people to keep track of their film collections.",
   "main": "index.js",
   "scripts": {
+    "setup-dbs": "ts-node src/db/schema.ts",
     "start": "ts-node src/index.ts",
     "test": "jest **/*.spec.ts"
   },
