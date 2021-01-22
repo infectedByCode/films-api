@@ -2,7 +2,7 @@ import knex from 'knex';
 import dotenv from 'dotenv';
 dotenv.config();
 
-export const db = knex({
+const db = knex({
   client: 'mysql2',
   connection: {
     host: process.env.DB_HOST,
@@ -11,3 +11,5 @@ export const db = knex({
     database: process.env.NODE_ENV === 'production' ? process.env.DB_NAME : process.env.DB_NAME_DEV,
   },
 });
+
+export default db;
