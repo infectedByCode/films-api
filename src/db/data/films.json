@@ -1,0 +1,37 @@
+[
+  {
+    "uid": "0a22fa4e-87a2-452a-b363-24f73dae8d59",
+    "title": "That Amazingly Great Film",
+    "description": "A film that will amaze everyone in the whole world.",
+    "year": 1999,
+    "keywords": "amazing,great,fun"
+  },
+  {
+    "uid": "214852a1-036b-43b2-b6cd-8b382d76ff10",
+    "title": "Kung Fu Papa",
+    "description": "A kicking fest of a film when a dad gets angry.",
+    "year": 1984,
+    "keywords": "fighting,family,dad"
+  },
+  {
+    "uid": "ea32d99f-d4ef-4f1c-8fa1-61ab470a52a2",
+    "title": "Super CatDog",
+    "description": "A strange tale of a dog with a cat's tail.",
+    "year": 2020,
+    "keywords": "strange,odd,pointless"
+  },
+  {
+    "uid": "b23352fc-5786-4183-a7a0-4f897f356d91",
+    "title": "Cars Go Zoom",
+    "description": "Six friends race their modified cars for fun.",
+    "year": 2000,
+    "keywords": "cars,teen"
+  },
+  {
+    "uid": "d06d0204-aa8b-4dac-bd18-9b5ff33b61b8",
+    "title": "Dr. Zoolittle",
+    "description": "A mostly copied film, but the vet works in a zoo.",
+    "year": 2021,
+    "keywords": "family,animal,vet"
+  }
+]
