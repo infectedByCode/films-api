@@ -4,7 +4,9 @@
   "description": "An API that allows people to keep track of their film collections.",
   "main": "index.js",
   "scripts": {
-    "setup-dbs": "ts-node src/db/schema.ts",
+    "migrate-latest": "NODE_ENV=development knex migrate:latest",
+    "migrate-rollback": "NODE_ENV=development knex migrate:rollback",
+    "seed": "knex seed:run",
     "start": "ts-node src/listen.ts",
     "test": "jest"
   },
