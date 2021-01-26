@@ -21,6 +21,14 @@ describe('/', () => {
         expect(msg).toBe('OK');
       });
   });
+  test('GET:404, returns a not found for routes not declared', () => {
+    request(app)
+      .get('/abc')
+      .expect(404)
+      .then(({ body }) => {
+        expect(body).toStrictEqual({ msg: 'not found' });
+      });
+  });
   describe('/api', () => {
     describe('/films', () => {
       test('GET:200, returns an array of all films', async () => {
@@ -31,8 +39,27 @@ describe('/', () => {
             expect(new Set(films)).toStrictEqual(new Set(filmsData));
           });
       });
+      test('POST:201, inserts new film when correct data is passed', async () => {
+        const filmData = {
+          title: 'Dalek Attack',
+          description: 'A film of the first Dalek attack.',
+          year: 1954,
+          keywords: '',
+        };
+        return request(app).post('/api/films').send(filmData).expect(201);
+      });
+      test('POST:400, returns an error if missing or invalid data passed', () => {
+        const filmData = {};
+        return request(app)
+          .post('/api/films')
+          .send(filmData)
+          .expect(400)
+          .then(({ body }) => {
+            expect(body).toStrictEqual({ msg: 'invalid or missing data' });
+          });
+      });
       describe('/:filmId', () => {
-        it('GET:200, returns a single film object when matched', () => {
+        test('GET:200, returns a single film object when matched', async () => {
           const uuid = 'ea32d99f-d4ef-4f1c-8fa1-61ab470a52a2';
           return request(app)
             .get(`/api/films/${uuid}`)
@@ -44,6 +71,17 @@ describe('/', () => {
                 description: "A strange tale of a dog with a cat's tail.",
                 year: 2020,
                 keywords: 'strange,odd,pointless',
+              });
+            });
+        });
+        test('GET:404, returns error if filmId is not matched', async () => {
+          const uuid = 'not-a-uuid';
+          return request(app)
+            .get(`/api/films/${uuid}`)
+            .expect(404)
+            .then(({ body }) => {
+              expect(body).toStrictEqual({
+                msg: `filmId - ${uuid} - not matched`,
               });
             });
         });
