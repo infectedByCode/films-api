@@ -2,8 +2,9 @@ import * as Knex from 'knex';
 
 export async function up(knex: Knex): Promise<void> {
   await knex.schema.createTable('user_creds', (table) => {
-    table.uuid('uid').references('uid').inTable('users').primary();
+    table.increments('id').primary();
     table.string('password').notNullable();
+    table.uuid('user_id').references('uid').inTable('users');
   });
 }
 
