@@ -1,4 +1,4 @@
-export interface Films {
+export interface Film {
   uid: string;
   title: string;
   description: string;

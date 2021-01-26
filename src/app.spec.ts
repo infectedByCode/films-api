@@ -31,6 +31,23 @@ describe('/', () => {
             expect(new Set(films)).toStrictEqual(new Set(filmsData));
           });
       });
+      describe('/:filmId', () => {
+        it('GET:200, returns a single film object when matched', () => {
+          const uuid = 'ea32d99f-d4ef-4f1c-8fa1-61ab470a52a2';
+          return request(app)
+            .get(`/api/films/${uuid}`)
+            .expect(200)
+            .then(({ body: { film } }) => {
+              expect(film).toStrictEqual({
+                uid: 'ea32d99f-d4ef-4f1c-8fa1-61ab470a52a2',
+                title: 'Super CatDog',
+                description: "A strange tale of a dog with a cat's tail.",
+                year: 2020,
+                keywords: 'strange,odd,pointless',
+              });
+            });
+        });
+      });
     });
   });
 });
