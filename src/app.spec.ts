@@ -60,10 +60,10 @@ describe('/', () => {
           });
       });
       describe('/:filmId', () => {
+        const filmId = 'ea32d99f-d4ef-4f1c-8fa1-61ab470a52a2';
         test('GET:200, returns a single film object when matched', async () => {
-          const uuid = 'ea32d99f-d4ef-4f1c-8fa1-61ab470a52a2';
           return request(app)
-            .get(`/api/films/${uuid}`)
+            .get(`/api/films/${filmId}`)
             .expect(200)
             .then(({ body: { film } }) => {
               expect(film).toStrictEqual({
@@ -84,6 +84,29 @@ describe('/', () => {
               expect(body).toStrictEqual({
                 msg: `filmId - ${uuid} - not matched`,
               });
+            });
+        });
+        test('PATCH:200, updates a film with passed data', async () => {
+          return request(app)
+            .patch(`/api/films/${filmId}`)
+            .send({ filmData: { year: 2021, title: 'Super CatHotDog' } })
+            .expect(200)
+            .then(({ body: { msg } }) => {
+              expect(msg).toBe(`${filmId} updated`);
+            })
+            .then(() => {
+              request(app)
+                .get(`/api/films/${filmId}`)
+                .expect(200)
+                .then(({ body: { film } }) => {
+                  expect(film).toStrictEqual({
+                    uid: 'ea32d99f-d4ef-4f1c-8fa1-61ab470a52a2',
+                    title: 'Super CatHotDog',
+                    description: "A strange tale of a dog with a cat's tail.",
+                    year: 2021,
+                    keywords: 'strange,odd,pointless',
+                  });
+                });
             });
         });
       });

@@ -1,5 +1,5 @@
 import { RequestHandler } from 'express';
-import { selectFilms, selectFilmById, insertFilm } from '../models/filmModels';
+import { selectFilms, selectFilmById, insertFilm, updateFilmById } from '../models/filmModels';
 import { Film, RawFilm } from '../../common/apiTypes';
 
 export const getFilms: RequestHandler<{}, { films: Film[] }> = async (req, res, next) => {
@@ -27,4 +27,15 @@ export const postFilm: RequestHandler<{ filmData: RawFilm }, {}> = async (req, r
     return next(result);
   }
   return res.sendStatus(201);
+};
+
+export const patchFilmById: RequestHandler<
+  { filmId: string },
+  { msg: string },
+  { filmData: Partial<RawFilm> }
+> = async (req, res, next) => {
+  const { filmId } = req.params;
+  const { filmData } = req.body;
+  const result = await updateFilmById(filmId, filmData);
+  return res.send({ msg: `${filmId} updated` });
 };
