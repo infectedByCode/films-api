@@ -5,6 +5,7 @@ import app from './index';
 import db from './db/connection';
 
 import filmsData from './db/data/films.json';
+import usersData from './db/data/users.json';
 
 describe('/', () => {
   beforeAll(async () => {
@@ -83,6 +84,19 @@ describe('/', () => {
               expect(body).toStrictEqual({
                 msg: `filmId - ${uuid} - not matched`,
               });
+            });
+        });
+      });
+    });
+    describe('/users', () => {
+      describe('/:userId', () => {
+        test('GET:200, returns user data when passed a matched ID', async () => {
+          const userId = '570023e2-477b-46b8-868c-c46a6fd8ffb1';
+          return request(app)
+            .get(`/api/users/${userId}`)
+            .expect(200)
+            .then(({ body: { user } }) => {
+              expect(user).toStrictEqual(usersData[0]);
             });
         });
       });

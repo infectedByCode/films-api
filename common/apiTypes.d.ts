@@ -12,3 +12,9 @@ export interface RawFilm {
   year: number;
   keywords: string;
 }
+
+export interface User {
+  uid: string;
+  username: string;
+  email: string;
+}
