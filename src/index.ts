@@ -18,6 +18,9 @@ app.all('*', (req: Request, res: Response, next: NextFunction) => {
 
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   // TODO: create error util function
+  if (err.message === 'not found') {
+    return res.status(404).send({ msg: err.message });
+  }
   return res.status(400).send({ msg: 'invalid or missing data' });
 });
 

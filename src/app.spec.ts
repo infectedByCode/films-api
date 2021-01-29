@@ -109,6 +109,24 @@ describe('/', () => {
                 });
             });
         });
+        test('PATCH:400, returns an error if invalid data is passed', async () => {
+          return request(app)
+            .patch(`/api/films/${filmId}`)
+            .send({ filmData: { year: 'year ninety-nine' } })
+            .expect(400)
+            .then(({ body: { msg } }) => {
+              expect(msg).toBe('invalid or missing data');
+            });
+        });
+        test('PATCH:404, returns an error if filmId does not exist', async () => {
+          return request(app)
+            .patch('/api/films/abcd-uuid')
+            .send({ filmData: { year: 2000 } })
+            .expect(404)
+            .then(({ body: { msg } }) => {
+              expect(msg).toBe('not found');
+            });
+        });
       });
     });
     describe('/users', () => {

@@ -31,11 +31,18 @@ export const postFilm: RequestHandler<{ filmData: RawFilm }, {}> = async (req, r
 
 export const patchFilmById: RequestHandler<
   { filmId: string },
-  { msg: string },
+  { msg: string } | Error,
   { filmData: Partial<RawFilm> }
 > = async (req, res, next) => {
   const { filmId } = req.params;
   const { filmData } = req.body;
   const result = await updateFilmById(filmId, filmData);
+  if (result instanceof Error) {
+    return next(result);
+  }
+  // result is affected rows - if === 0 then not found
+  if (result === 0) {
+    return next(Error('not found'));
+  }
   return res.send({ msg: `${filmId} updated` });
 };

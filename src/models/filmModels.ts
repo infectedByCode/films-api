@@ -24,6 +24,12 @@ export const insertFilm = async (filmData: RawFilm): Promise<any> => {
 };
 
 export const updateFilmById = async (filmId: string, filmData: Partial<RawFilm>): Promise<any> => {
-  const result = await db('films').update({ ...filmData });
-  return result;
+  try {
+    const result = await db('films')
+      .update({ ...filmData })
+      .where('uid', filmId);
+    return result;
+  } catch (err) {
+    return err;
+  }
 };
