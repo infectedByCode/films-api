@@ -1,4 +1,4 @@
-import { RequestHandler } from 'express';
+import { RequestHandler, NextFunction } from 'express';
 import { selectFilms, selectFilmById, insertFilm, updateFilmById } from '../models/filmModels';
 import { Film, RawFilm } from '../../common/apiTypes';
 
@@ -31,7 +31,7 @@ export const postFilm: RequestHandler<{ filmData: RawFilm }, {}> = async (req, r
 
 export const patchFilmById: RequestHandler<
   { filmId: string },
-  { msg: string } | Error,
+  { msg: string },
   { filmData: Partial<RawFilm> }
 > = async (req, res, next) => {
   const { filmId } = req.params;
