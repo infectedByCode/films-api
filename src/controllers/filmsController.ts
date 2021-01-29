@@ -1,5 +1,5 @@
 import { RequestHandler, NextFunction } from 'express';
-import { selectFilms, selectFilmById, insertFilm, updateFilmById } from '../models/filmModels';
+import { selectFilms, selectFilmById, insertFilm, updateFilmById, removeFilmById } from '../models/filmModels';
 import { Film, RawFilm } from '../../common/apiTypes';
 
 export const getFilms: RequestHandler<{}, { films: Film[] }> = async (req, res, next) => {
@@ -45,4 +45,13 @@ export const patchFilmById: RequestHandler<
     return next(Error('not found'));
   }
   return res.send({ msg: `${filmId} updated` });
+};
+
+export const deleteFilmById: RequestHandler<{ filmId: string }, {}> = async (req, res, next) => {
+  const { filmId } = req.params;
+  const result = await removeFilmById(filmId);
+  if (result === 0) {
+    return next(Error('not found'));
+  }
+  return res.sendStatus(204);
 };

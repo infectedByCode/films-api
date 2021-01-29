@@ -13,7 +13,7 @@ export const selectFilmById = async (filmId: string): Promise<Film> => {
   return film;
 };
 
-export const insertFilm = async (filmData: RawFilm): Promise<any> => {
+export const insertFilm = async (filmData: RawFilm): Promise<number[] | Error> => {
   const uid: string = uuidv4();
   try {
     const result = await db('films').insert({ ...filmData, uid });
@@ -23,7 +23,7 @@ export const insertFilm = async (filmData: RawFilm): Promise<any> => {
   }
 };
 
-export const updateFilmById = async (filmId: string, filmData: Partial<RawFilm>): Promise<any> => {
+export const updateFilmById = async (filmId: string, filmData: Partial<RawFilm>): Promise<number | Error> => {
   try {
     const result = await db('films')
       .update({ ...filmData })
@@ -32,4 +32,9 @@ export const updateFilmById = async (filmId: string, filmData: Partial<RawFilm>)
   } catch (err) {
     return err;
   }
+};
+
+export const removeFilmById = async (filmId: string): Promise<number> => {
+  const result = await db('films').delete().where('uid', filmId);
+  return result;
 };

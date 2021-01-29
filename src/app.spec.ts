@@ -95,7 +95,7 @@ describe('/', () => {
               expect(msg).toBe(`${filmId} updated`);
             })
             .then(() => {
-              request(app)
+              return request(app)
                 .get(`/api/films/${filmId}`)
                 .expect(200)
                 .then(({ body: { film } }) => {
@@ -122,6 +122,22 @@ describe('/', () => {
           return request(app)
             .patch('/api/films/abcd-uuid')
             .send({ filmData: { year: 2000 } })
+            .expect(404)
+            .then(({ body: { msg } }) => {
+              expect(msg).toBe('not found');
+            });
+        });
+        test('DELETE: 204, deletes a film  when passed a correct ID', () => {
+          return request(app)
+            .delete(`/api/films/${filmId}`)
+            .expect(204)
+            .then(() => {
+              return request(app).get(`/api/films/${filmId}`).expect(404);
+            });
+        });
+        test('DELETE: 404, returns an error if film is not found', () => {
+          return request(app)
+            .delete('/api/films/not-an-id')
             .expect(404)
             .then(({ body: { msg } }) => {
               expect(msg).toBe('not found');
