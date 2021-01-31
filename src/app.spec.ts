@@ -32,7 +32,7 @@ describe('/', () => {
   });
   describe('/api', () => {
     describe('/films', () => {
-      test('GET:200, returns an array of all films', async () => {
+      test('GET:200, returns an array of all films', () => {
         return request(app)
           .get('/api/films')
           .expect(200)
@@ -40,7 +40,7 @@ describe('/', () => {
             expect(new Set(films)).toStrictEqual(new Set(filmsData));
           });
       });
-      test('POST:201, inserts new film when correct data is passed', async () => {
+      test('POST:201, inserts new film when correct data is passed', () => {
         const filmData = {
           title: 'Dalek Attack',
           description: 'A film of the first Dalek attack.',
@@ -61,7 +61,7 @@ describe('/', () => {
       });
       describe('/:filmId', () => {
         const filmId = 'ea32d99f-d4ef-4f1c-8fa1-61ab470a52a2';
-        test('GET:200, returns a single film object when matched', async () => {
+        test('GET:200, returns a single film object when matched', () => {
           return request(app)
             .get(`/api/films/${filmId}`)
             .expect(200)
@@ -75,7 +75,7 @@ describe('/', () => {
               });
             });
         });
-        test('GET:404, returns error if filmId is not matched', async () => {
+        test('GET:404, returns error if filmId is not matched', () => {
           const uuid = 'not-a-uuid';
           return request(app)
             .get(`/api/films/${uuid}`)
@@ -86,7 +86,7 @@ describe('/', () => {
               });
             });
         });
-        test('PATCH:200, updates a film with passed data', async () => {
+        test('PATCH:200, updates a film with passed data', () => {
           return request(app)
             .patch(`/api/films/${filmId}`)
             .send({ filmData: { year: 2021, title: 'Super CatHotDog' } })
@@ -109,7 +109,7 @@ describe('/', () => {
                 });
             });
         });
-        test('PATCH:400, returns an error if invalid data is passed', async () => {
+        test('PATCH:400, returns an error if invalid data is passed', () => {
           return request(app)
             .patch(`/api/films/${filmId}`)
             .send({ filmData: { year: 'year ninety-nine' } })
@@ -118,7 +118,7 @@ describe('/', () => {
               expect(msg).toBe('invalid or missing data');
             });
         });
-        test('PATCH:404, returns an error if filmId does not exist', async () => {
+        test('PATCH:404, returns an error if filmId does not exist', () => {
           return request(app)
             .patch('/api/films/abcd-uuid')
             .send({ filmData: { year: 2000 } })
@@ -148,7 +148,7 @@ describe('/', () => {
     describe('/users', () => {
       describe('/:userId', () => {
         const userId = '570023e2-477b-46b8-868c-c46a6fd8ffb1';
-        test('GET:200, returns user data when passed a matched ID', async () => {
+        test('GET:200, returns user data when passed a matched ID', () => {
           return request(app)
             .get(`/api/users/${userId}`)
             .expect(200)
@@ -156,7 +156,7 @@ describe('/', () => {
               expect(user).toStrictEqual(usersData[0]);
             });
         });
-        test('PATCH:200, updates a user email by ID', async () => {
+        test('PATCH:200, updates a user email by ID', () => {
           return request(app)
             .patch(`/api/users/${userId}`)
             .send({ email: 'mynew@email.com' })
@@ -173,7 +173,7 @@ describe('/', () => {
                 });
             });
         });
-        test('PATCH:400, returns an error if email is invalid format', async () => {
+        test('PATCH:400, returns an error if email is invalid format', () => {
           return request(app)
             .patch(`/api/users/${userId}`)
             .send({ email: { a: 123 } })
@@ -182,7 +182,7 @@ describe('/', () => {
               expect(msg).toBe('invalid or missing data');
             });
         });
-        test('PATCH:404, returns an error if userId is not found', async () => {
+        test('PATCH:404, returns an error if userId is not found', () => {
           return request(app)
             .patch('/api/users/not-uuid')
             .send({ email: 'email@me.com' })
