@@ -14,3 +14,8 @@ export const updateUserById = async (userId: string, email: string): Promise<num
     return err;
   }
 };
+
+export const removeUserById = async (userId: string): Promise<number | Error> => {
+  const result = await db('users').delete().where('uid', userId);
+  return result;
+};

@@ -4,7 +4,7 @@ export async function up(knex: Knex): Promise<void> {
   await knex.schema.createTable('user_creds', (table) => {
     table.increments('id').primary();
     table.string('password').notNullable();
-    table.uuid('user_id').references('uid').inTable('users');
+    table.uuid('user_id').references('uid').inTable('users').onDelete('cascade');
   });
 }
 

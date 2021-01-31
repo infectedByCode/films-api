@@ -191,6 +191,22 @@ describe('/', () => {
               expect(msg).toBe('not found');
             });
         });
+        test('DELETE:204, deletes a user by ID', () => {
+          return request(app)
+            .delete(`/api/users/${userId}`)
+            .expect(204)
+            .then(() => {
+              return request(app).get(`/api/users/${userId}`).expect(404);
+            });
+        });
+        test('DELETE: 404, returns an error if userId not found', () => {
+          return request(app)
+            .delete(`/api/users/not-here`)
+            .expect(404)
+            .then(({ body: { msg } }) => {
+              expect(msg).toBe('not found');
+            });
+        });
       });
     });
   });
