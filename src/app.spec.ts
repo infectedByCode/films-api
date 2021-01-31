@@ -147,13 +147,48 @@ describe('/', () => {
     });
     describe('/users', () => {
       describe('/:userId', () => {
+        const userId = '570023e2-477b-46b8-868c-c46a6fd8ffb1';
         test('GET:200, returns user data when passed a matched ID', async () => {
-          const userId = '570023e2-477b-46b8-868c-c46a6fd8ffb1';
           return request(app)
             .get(`/api/users/${userId}`)
             .expect(200)
             .then(({ body: { user } }) => {
               expect(user).toStrictEqual(usersData[0]);
+            });
+        });
+        test('PATCH:200, updates a user email by ID', async () => {
+          return request(app)
+            .patch(`/api/users/${userId}`)
+            .send({ email: 'mynew@email.com' })
+            .expect(200)
+            .then(({ body: { msg } }) => {
+              expect(msg).toBe(`${userId} updated`);
+              return request(app)
+                .get(`/api/users/${userId}`)
+                .expect(200)
+                .then(({ body: { user } }) => {
+                  const userCopy = Object.assign({}, usersData[0]);
+                  userCopy.email = 'mynew@email.com';
+                  expect(user).toStrictEqual(userCopy);
+                });
+            });
+        });
+        test('PATCH:400, returns an error if email is invalid format', async () => {
+          return request(app)
+            .patch(`/api/users/${userId}`)
+            .send({ email: { a: 123 } })
+            .expect(400)
+            .then(({ body: { msg } }) => {
+              expect(msg).toBe('invalid or missing data');
+            });
+        });
+        test('PATCH:404, returns an error if userId is not found', async () => {
+          return request(app)
+            .patch('/api/users/not-uuid')
+            .send({ email: 'email@me.com' })
+            .expect(404)
+            .then(({ body: { msg } }) => {
+              expect(msg).toBe('not found');
             });
         });
       });

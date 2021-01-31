@@ -1,7 +1,7 @@
-import { getUserById } from '../controllers/usersControllers';
+import { getUserById, patchUserById } from '../controllers/usersControllers';
 import { Router } from 'express';
 const usersRouter = Router();
 
-usersRouter.get('/:userId', getUserById);
+usersRouter.route('/:userId').get(getUserById).patch(patchUserById);
 
 export default usersRouter;
