@@ -1,11 +1,11 @@
 process.env.NODE_ENV = 'test';
 
 import request from 'supertest';
-import app from './index';
-import db from './db/connection';
+import app from '../index';
+import db from '../db/connection';
 
-import filmsData from './db/data/films.json';
-import usersData from './db/data/users.json';
+import filmsData from '../db/data/films.json';
+import usersData from '../db/data/users.json';
 
 describe('/', () => {
   beforeAll(async () => {
@@ -57,6 +57,30 @@ describe('/', () => {
           .expect(400)
           .then(({ body }) => {
             expect(body).toStrictEqual({ msg: 'invalid or missing data' });
+          });
+      });
+      test('PUT:405, returns a 405 error for not allowed methods', () => {
+        return request(app)
+          .put('/api/films')
+          .expect(405)
+          .then(({ body: { msg } }) => {
+            expect(msg).toBe('method not allowed');
+          });
+      });
+      test('PATCH:405, returns a 405 error for not allowed methods', () => {
+        return request(app)
+          .patch('/api/films')
+          .expect(405)
+          .then(({ body: { msg } }) => {
+            expect(msg).toBe('method not allowed');
+          });
+      });
+      test('DELETE:405, returns a 405 error for not allowed methods', () => {
+        return request(app)
+          .delete('/api/films')
+          .expect(405)
+          .then(({ body: { msg } }) => {
+            expect(msg).toBe('method not allowed');
           });
       });
       describe('/:filmId', () => {
@@ -143,6 +167,14 @@ describe('/', () => {
               expect(msg).toBe('not found');
             });
         });
+        test('PUT:405, returns a 405 error for not allowed methods', () => {
+          return request(app)
+            .put('/api/films/id23')
+            .expect(405)
+            .then(({ body: { msg } }) => {
+              expect(msg).toBe('method not allowed');
+            });
+        });
       });
     });
     describe('/users', () => {
@@ -205,6 +237,14 @@ describe('/', () => {
             .expect(404)
             .then(({ body: { msg } }) => {
               expect(msg).toBe('not found');
+            });
+        });
+        test('PUT:405, returns a 405 error for not allowed methods', () => {
+          return request(app)
+            .put('/api/users/1234')
+            .expect(405)
+            .then(({ body: { msg } }) => {
+              expect(msg).toBe('method not allowed');
             });
         });
       });
