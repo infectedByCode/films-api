@@ -178,6 +178,20 @@ describe('/', () => {
       });
     });
     describe('/users', () => {
+      test('POST:201, inserts new user when correct data is passed', () => {
+        const userData = {
+          username: 'jonny_d',
+          email: 'jonny@test.com',
+          password: 'super-secure',
+        };
+        return request(app)
+          .post('/api/users')
+          .send({ user: userData })
+          .expect(201)
+          .then(({ body: { msg } }) => {
+            expect(msg).toBe('jonny_d successfully created');
+          });
+      });
       describe('/:userId', () => {
         const userId = '570023e2-477b-46b8-868c-c46a6fd8ffb1';
         test('GET:200, returns user data when passed a matched ID', () => {

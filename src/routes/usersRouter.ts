@@ -1,7 +1,9 @@
-import { getUserById, patchUserById, deleteUserById } from '../controllers/usersControllers';
+import { getUserById, patchUserById, deleteUserById, postUser } from '../controllers/usersControllers';
 import { Router } from 'express';
 import { methodNotAllowedResponder } from '../middleware/middleware';
 const usersRouter = Router();
+
+usersRouter.route('/').post(postUser);
 
 usersRouter
   .route('/:userId')

@@ -1,6 +1,12 @@
 import { RequestHandler } from 'express';
-import { selectUserById, updateUserById, removeUserById } from '../models/userModels';
-import { User } from '../../common/apiTypes';
+import {
+  selectUserById,
+  updateUserById,
+  removeUserById,
+  insertUser,
+  insertUserCredentials,
+} from '../models/userModels';
+import { User, NewUser } from '../../common/apiTypes';
 
 export const getUserById: RequestHandler<{ userId: string }, { user: User }> = async (req, res, next) => {
   const { userId } = req.params;
@@ -35,4 +41,17 @@ export const deleteUserById: RequestHandler<{ userId: string }, {}> = async (req
     return next(Error('not found'));
   }
   return res.sendStatus(204);
+};
+
+export const postUser: RequestHandler<{}, {}, { user: NewUser }> = async (req, res, next) => {
+  const { user } = req.body;
+  const userResult = await insertUser(user);
+  if (userResult instanceof Error) {
+    return next(userResult);
+  }
+  const credResult = await insertUserCredentials(userResult);
+  if (credResult instanceof Error) {
+    return next(credResult);
+  }
+  return res.status(201).send({ msg: `${user.username} successfully created` });
 };
