@@ -16,7 +16,7 @@ interface User {
 
 interface UserCredentials {
   readonly id: number;
-  username: string;
+  user_id: string;
   password: string;
 }
 
