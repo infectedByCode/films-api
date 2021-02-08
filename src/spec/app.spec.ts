@@ -192,6 +192,34 @@ describe('/', () => {
             expect(msg).toBe('jonny_d successfully created');
           });
       });
+      test('POST:400, returns an error if error with user insert', () => {
+        const userData = {
+          username: null,
+          email: 'jonny@test.com',
+          password: 'super-secure',
+        };
+        return request(app)
+          .post('/api/users')
+          .send({ user: userData })
+          .expect(400)
+          .then(({ body: { msg } }) => {
+            expect(msg).toBe('invalid or missing data');
+          });
+      });
+      test('POST:400, returns an error if error with user credentials insert', () => {
+        const userData = {
+          username: 'jonny_d',
+          email: 'jonny@test.com',
+          password: null,
+        };
+        return request(app)
+          .post('/api/users')
+          .send({ user: userData })
+          .expect(400)
+          .then(({ body: { msg } }) => {
+            expect(msg).toBe('invalid or missing data');
+          });
+      });
       describe('/:userId', () => {
         const userId = '570023e2-477b-46b8-868c-c46a6fd8ffb1';
         test('GET:200, returns user data when passed a matched ID', () => {

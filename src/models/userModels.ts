@@ -37,8 +37,8 @@ export const insertUser = async (user: NewUser): Promise<FullUser | Error> => {
 
 export const insertUserCredentials = async (user: FullUser): Promise<{ username: string } | Error> => {
   const { uuid, password, username } = user;
-  const hash = bcrypt.hashSync(password, 15);
   try {
+    const hash = bcrypt.hashSync(password, 15);
     await db('user_creds').insert({ user_id: uuid, password: hash });
     return { username };
   } catch (err) {
