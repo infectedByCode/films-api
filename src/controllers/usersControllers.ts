@@ -6,7 +6,7 @@ import {
   insertUser,
   insertUserCredentials,
 } from '../models/userModels';
-import { User, NewUser } from '../../common/apiTypes';
+import { User, UserCred } from '../../common/apiTypes';
 
 export const getUserById: RequestHandler<{ userId: string }, { user: User }> = async (req, res, next) => {
   const { userId } = req.params;
@@ -43,7 +43,7 @@ export const deleteUserById: RequestHandler<{ userId: string }, {}> = async (req
   return res.sendStatus(204);
 };
 
-export const postUser: RequestHandler<{}, {}, { user: NewUser }> = async (req, res, next) => {
+export const postUser: RequestHandler<{}, {}, { user: UserCred }> = async (req, res, next) => {
   const { user } = req.body;
   const userResult = await insertUser(user);
   if (userResult instanceof Error) {

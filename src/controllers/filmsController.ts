@@ -1,4 +1,4 @@
-import { RequestHandler, NextFunction } from 'express';
+import { RequestHandler } from 'express';
 import { selectFilms, selectFilmById, insertFilm, updateFilmById, removeFilmById } from '../models/filmModels';
 import { Film, RawFilm } from '../../common/apiTypes';
 

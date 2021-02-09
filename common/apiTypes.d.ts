@@ -19,7 +19,7 @@ export interface User {
   email: string;
 }
 
-export interface NewUser {
+export interface UserCred {
   username: string;
   email: string;
   password: string;
