@@ -1,8 +1,8 @@
 import bcrypt from 'bcrypt';
 import { v4 as uuidv4 } from 'uuid';
 import db from '../db/connection';
-import { User } from '../db/types';
-import { NewUser } from '../../common/apiTypes';
+import { User, UserCredentials } from '../db/types';
+import { UserCred } from '../../common/apiTypes';
 import { FullUser } from '../index.d';
 
 export const selectUserById = async (userId: string): Promise<User> => {
@@ -24,7 +24,7 @@ export const removeUserById = async (userId: string): Promise<number | Error> =>
   return result;
 };
 
-export const insertUser = async (user: NewUser): Promise<FullUser | Error> => {
+export const insertUser = async (user: UserCred): Promise<FullUser | Error> => {
   const uid = uuidv4();
   const { email, username } = user;
   try {

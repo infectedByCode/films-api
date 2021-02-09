@@ -323,5 +323,24 @@ describe('/', () => {
         });
       });
     });
+    describe('/auth', () => {
+      describe('/login', () => {
+        test('POST:200, logs in a user and returns a JWT', () => {
+          const userData = {
+            username: 'jonny_d',
+            email: 'jonny@test.com',
+            password: 'super-secure',
+          };
+
+          return request(app)
+            .post('/api/auth/login')
+            .send({ userData })
+            .expect(200)
+            .then(({ body }) => {
+              expect(body).toHaveProperty('token');
+            });
+        });
+      });
+    });
   });
 });
