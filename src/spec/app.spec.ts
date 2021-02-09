@@ -220,6 +220,38 @@ describe('/', () => {
             expect(msg).toBe('invalid or missing data');
           });
       });
+      test('GET:405, returns a 405 error for not allowed methods', () => {
+        return request(app)
+          .get('/api/users')
+          .expect(405)
+          .then(({ body: { msg } }) => {
+            expect(msg).toBe('method not allowed');
+          });
+      });
+      test('PUT:405, returns a 405 error for not allowed methods', () => {
+        return request(app)
+          .put('/api/users')
+          .expect(405)
+          .then(({ body: { msg } }) => {
+            expect(msg).toBe('method not allowed');
+          });
+      });
+      test('PATCH:405, returns a 405 error for not allowed methods', () => {
+        return request(app)
+          .patch('/api/users')
+          .expect(405)
+          .then(({ body: { msg } }) => {
+            expect(msg).toBe('method not allowed');
+          });
+      });
+      test('DELETE:405, returns a 405 error for not allowed methods', () => {
+        return request(app)
+          .delete('/api/users')
+          .expect(405)
+          .then(({ body: { msg } }) => {
+            expect(msg).toBe('method not allowed');
+          });
+      });
       describe('/:userId', () => {
         const userId = '570023e2-477b-46b8-868c-c46a6fd8ffb1';
         test('GET:200, returns user data when passed a matched ID', () => {
