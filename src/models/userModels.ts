@@ -42,6 +42,7 @@ export const insertUserCredentials = async (user: FullUser): Promise<{ username:
     await db('user_creds').insert({ user_id: uuid, password: hash });
     return { username };
   } catch (err) {
+    // TODO: cleanup inserted user
     return err;
   }
 };

@@ -195,7 +195,7 @@ describe('/', () => {
       test('POST:400, returns an error if error with user insert', () => {
         const userData = {
           username: null,
-          email: 'jonny@test.com',
+          email: 'jonny2@test.com',
           password: 'super-secure',
         };
         return request(app)
@@ -208,9 +208,9 @@ describe('/', () => {
       });
       test('POST:400, returns an error if error with user credentials insert', () => {
         const userData = {
-          username: 'jonny_d',
-          email: 'jonny@test.com',
-          password: null,
+          username: 'jonny_d3',
+          email: 'jonny3@test.com',
+          password: { null: null },
         };
         return request(app)
           .post('/api/users')
