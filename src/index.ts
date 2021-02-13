@@ -21,6 +21,9 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   if (err.message === 'not found') {
     return res.status(404).send({ msg: err.message });
   }
+  if (err.message === 'invalid login') {
+    return res.status(400).send({ msg: 'username or password incorrect' });
+  }
   return res.status(400).send({ msg: 'invalid or missing data' });
 });
 

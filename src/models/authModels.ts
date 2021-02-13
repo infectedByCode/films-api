@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 import db from '../db/connection';
-import { User, UserCredentials } from '../db/types';
+import jwt from 'jsonwebtoken';
 
 export const loginUser = async (userData: { username: string; email: string; password: string }): Promise<any> => {
   const { username, email, password } = userData;
@@ -9,18 +9,14 @@ export const loginUser = async (userData: { username: string; email: string; pas
     return new Error('not found');
   }
   try {
-    const hash = bcrypt.hashSync(password, 15);
-    const userDetails = await db('user_creds')
-      .first('user_id', 'password')
-      .where('user_id', user?.uid)
-      .andWhere('password', hash);
-    if (!userDetails) {
-      return new Error('to handle');
-    }
-    const match = await bcrypt.compare(password, userDetails.password);
-    if (match) {
-      // TODO: add jwt
-      return { token: 'a token' };
+    const userDetails = await db('user_creds').first().where('user_id', user?.uid);
+    if (userDetails) {
+      const match = await bcrypt.compare(password, userDetails.password);
+      if (match) {
+        const token = jwt.sign({ userId: user.uid }, 'secret', { expiresIn: '60m' });
+        return { token };
+      }
+      return new Error('invalid login');
     }
   } catch (err) {
     return err;

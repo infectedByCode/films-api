@@ -340,6 +340,51 @@ describe('/', () => {
               expect(body).toHaveProperty('token');
             });
         });
+        test('POST:400, returns an error if user password is incorrect', () => {
+          const userData = {
+            username: 'jonny_d',
+            email: 'jonny@test.com',
+            password: 'not-super-secure',
+          };
+
+          return request(app)
+            .post('/api/auth/login')
+            .send({ userData })
+            .expect(400)
+            .then(({ body: { msg } }) => {
+              expect(msg).toBe('username or password incorrect');
+            });
+        });
+        test('POST:400, returns an error is data is in invalid format', () => {
+          const userData = {
+            username: 'jonny_d',
+            email: 'jonny@test.com',
+            password: {},
+          };
+
+          return request(app)
+            .post('/api/auth/login')
+            .send({ userData })
+            .expect(400)
+            .then(({ body: { msg } }) => {
+              expect(msg).toBe('invalid or missing data');
+            });
+        });
+        test('POST:404, return an error if username is invalid', () => {
+          const userData = {
+            username: 'not-a-user',
+            email: 'noone@test.com',
+            password: 'super-secure',
+          };
+
+          return request(app)
+            .post('/api/auth/login')
+            .send({ userData })
+            .expect(404)
+            .then(({ body: { msg } }) => {
+              expect(msg).toBe('not found');
+            });
+        });
       });
     });
   });
