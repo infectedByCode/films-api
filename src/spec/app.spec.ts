@@ -370,7 +370,7 @@ describe('/', () => {
               expect(msg).toBe('invalid or missing data');
             });
         });
-        test('POST:404, return an error if username is invalid', () => {
+        test('POST:404, returns an error if username is invalid', () => {
           const userData = {
             username: 'not-a-user',
             email: 'noone@test.com',
@@ -383,6 +383,40 @@ describe('/', () => {
             .expect(404)
             .then(({ body: { msg } }) => {
               expect(msg).toBe('not found');
+            });
+        });
+        test('GET:405, returns an error if method is not allowed', () => {
+          return request(app)
+            .get('/api/auth/login')
+            .expect(405)
+            .then(({ body: { msg } }) => {
+              expect(msg).toBe('method not allowed');
+            });
+        });
+        test('PUT:405, returns an error if method is not allowed', () => {
+          return request(app)
+            .put('/api/auth/login')
+            .send({})
+            .expect(405)
+            .then(({ body: { msg } }) => {
+              expect(msg).toBe('method not allowed');
+            });
+        });
+        test('PATCH:405, returns an error if method is not allowed', () => {
+          return request(app)
+            .patch('/api/auth/login')
+            .send({})
+            .expect(405)
+            .then(({ body: { msg } }) => {
+              expect(msg).toBe('method not allowed');
+            });
+        });
+        test('DELETE:405, returns an error if method is not allowed', () => {
+          return request(app)
+            .delete('/api/auth/login')
+            .expect(405)
+            .then(({ body: { msg } }) => {
+              expect(msg).toBe('method not allowed');
             });
         });
       });
