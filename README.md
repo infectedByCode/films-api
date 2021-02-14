@@ -40,5 +40,9 @@ In your console, type `npm start` to run the API. The API should run on the port
 
 - Finish README 😃
 - Add auth middleware and update tests on protect routes
+  - Update type for auth handler to work with all routes
 - Improve error handling
 - Add cleanup of failed signup
+- Add config file
+- Add CORS / CSP protocol
+- Add functionality for films for a given user -> new table, add film if not exist (possibly using OMDBAPI / ROTTOM TOMATOES API?)
