@@ -9,7 +9,6 @@ import usersData from '../db/data/users.json';
 
 describe('/', () => {
   let authToken: string;
-  let uid: string;
   beforeAll(async () => {
     await db.seed.run();
     const userData = {
@@ -21,8 +20,7 @@ describe('/', () => {
       .post('/api/users')
       .send({ user: userData })
       .expect(201)
-      .then(({ body: { id } }) => {
-        uid = id;
+      .then(() => {
         return request(app)
           .post('/api/auth/login')
           .send({ userData })
@@ -178,6 +176,7 @@ describe('/', () => {
         test('DELETE: 204, deletes a film  when passed a correct ID', () => {
           return request(app)
             .delete(`/api/films/${filmId}`)
+            .set('authorization', authToken)
             .expect(204)
             .then(() => {
               return request(app).get(`/api/films/${filmId}`).expect(404);
@@ -186,6 +185,7 @@ describe('/', () => {
         test('DELETE: 404, returns an error if film is not found', () => {
           return request(app)
             .delete('/api/films/not-an-id')
+            .set('authorization', authToken)
             .expect(404)
             .then(({ body: { msg } }) => {
               expect(msg).toBe('not found');

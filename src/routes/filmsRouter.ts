@@ -8,7 +8,7 @@ filmsRouter
   .route('/:filmId')
   .get(getFilmById)
   .patch(checkAuth, patchFilmById)
-  .delete(deleteFilmById)
+  .delete(checkAuth, deleteFilmById)
   .all(methodNotAllowedResponder);
 
 export default filmsRouter;
