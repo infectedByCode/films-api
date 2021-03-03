@@ -66,12 +66,13 @@ describe('/', () => {
           year: 1954,
           keywords: '',
         };
-        return request(app).post('/api/films').send(filmData).expect(201);
+        return request(app).post('/api/films').set('authorization', authToken).send(filmData).expect(201);
       });
       test('POST:400, returns an error if missing or invalid data passed', () => {
         const filmData = {};
         return request(app)
           .post('/api/films')
+          .set('authorization', authToken)
           .send(filmData)
           .expect(400)
           .then(({ body }) => {

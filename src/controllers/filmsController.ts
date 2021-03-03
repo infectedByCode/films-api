@@ -20,7 +20,7 @@ export const getFilmById: RequestHandler<{ filmId: string }, { film: Film } | { 
   return res.send({ film });
 };
 
-export const postFilm: RequestHandler<{ filmData: RawFilm }, {}> = async (req, res, next) => {
+export const postFilm: RequestHandler<{}, {}, RawFilm> = async (req, res, next) => {
   const filmData = req.body;
   const result = await insertFilm(filmData);
   if (result instanceof Error) {
