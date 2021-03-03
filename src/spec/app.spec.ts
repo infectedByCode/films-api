@@ -8,8 +8,29 @@ import filmsData from '../db/data/films.json';
 import usersData from '../db/data/users.json';
 
 describe('/', () => {
+  let authToken: string;
+  let uid: string;
   beforeAll(async () => {
     await db.seed.run();
+    const userData = {
+      username: 'tokenizer',
+      email: 'token@auth.com',
+      password: 'password',
+    };
+    await request(app)
+      .post('/api/users')
+      .send({ user: userData })
+      .expect(201)
+      .then(({ body: { id } }) => {
+        uid = id;
+        return request(app)
+          .post('/api/auth/login')
+          .send({ userData })
+          .expect(200)
+          .then(({ body }) => {
+            authToken = body.token;
+          });
+      });
   });
   afterAll(async () => {
     await db.destroy();
@@ -113,6 +134,7 @@ describe('/', () => {
         test('PATCH:200, updates a film with passed data', () => {
           return request(app)
             .patch(`/api/films/${filmId}`)
+            .set('authorization', authToken)
             .send({ filmData: { year: 2021, title: 'Super CatHotDog' } })
             .expect(200)
             .then(({ body: { msg } }) => {
@@ -136,6 +158,7 @@ describe('/', () => {
         test('PATCH:400, returns an error if invalid data is passed', () => {
           return request(app)
             .patch(`/api/films/${filmId}`)
+            .set('authorization', authToken)
             .send({ filmData: { year: 'year ninety-nine' } })
             .expect(400)
             .then(({ body: { msg } }) => {
@@ -145,6 +168,7 @@ describe('/', () => {
         test('PATCH:404, returns an error if filmId does not exist', () => {
           return request(app)
             .patch('/api/films/abcd-uuid')
+            .set('authorization', authToken)
             .send({ filmData: { year: 2000 } })
             .expect(404)
             .then(({ body: { msg } }) => {
