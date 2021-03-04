@@ -6,6 +6,7 @@ import {
   updateFilmById,
   removeFilmById,
   fetchFilmsByUserId,
+  insertFilmIdByUserId,
 } from '../models/filmModels';
 import { Film, RawFilm } from '../../common/apiTypes';
 
@@ -71,4 +72,15 @@ export const getFilmsByUserId: RequestHandler<{ userId: string }, { userId: stri
   const { userId } = req.params;
   const films = await fetchFilmsByUserId(userId);
   return res.send({ userId, films });
+};
+
+export const postFilmIdByUserId: RequestHandler<{ userId: string }, {}, { filmId: string }> = async (
+  req,
+  res,
+  next
+) => {
+  const { userId } = req.params;
+  const { filmId } = req.body;
+  await insertFilmIdByUserId(userId, filmId);
+  return res.sendStatus(201);
 };

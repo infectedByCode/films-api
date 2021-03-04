@@ -42,7 +42,12 @@ export const removeFilmById = async (filmId: string): Promise<number> => {
 export const fetchFilmsByUserId = async (userId: string): Promise<Film[]> => {
   const result = await db('users_film_collections')
     .leftJoin('films', { 'films.uid': 'users_film_collections.film_id' })
-    .select()
+    .select('film_id', 'title', 'description', 'year', 'keywords')
     .where('user_id', userId);
+  return result;
+};
+
+export const insertFilmIdByUserId = async (userId: string, filmId: string): Promise<number[]> => {
+  const result = await db('users_film_collections').insert({ user_id: userId, film_id: filmId });
   return result;
 };

@@ -206,15 +206,28 @@ describe('/', () => {
         });
       });
       describe('/users/:userId', () => {
+        it('POST:201, adds a film to a user', () => {
+          return request(app)
+            .post(`/api/films/users/${uid}`)
+            .set('authorization', authToken)
+            .send({ filmId: filmsData[0].uid })
+            .expect(201);
+        });
         it('GET:200, returns an array of films for a given user', () => {
           return request(app)
             .get(`/api/films/users/${uid}`)
             .set('authorization', authToken)
             .expect(200)
             .then(({ body }) => {
-              console.log(body.films[0]);
               expect(body).toHaveProperty('userId');
               expect(body).toHaveProperty('films');
+              body.films.forEach((film: Object) => {
+                expect(film).toHaveProperty('film_id');
+                expect(film).toHaveProperty('title');
+                expect(film).toHaveProperty('description');
+                expect(film).toHaveProperty('year');
+                expect(film).toHaveProperty('keywords');
+              });
             });
         });
       });

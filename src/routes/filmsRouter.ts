@@ -7,6 +7,7 @@ import {
   patchFilmById,
   deleteFilmById,
   getFilmsByUserId,
+  postFilmIdByUserId,
 } from '../controllers/filmsController';
 const filmsRouter = Router();
 
@@ -17,6 +18,10 @@ filmsRouter
   .patch(checkAuth, patchFilmById)
   .delete(checkAuth, deleteFilmById)
   .all(methodNotAllowedResponder);
-filmsRouter.route('/users/:userId').get(checkAuth, getFilmsByUserId).all(methodNotAllowedResponder);
+filmsRouter
+  .route('/users/:userId')
+  .get(checkAuth, getFilmsByUserId)
+  .post(checkAuth, postFilmIdByUserId)
+  .all(methodNotAllowedResponder);
 
 export default filmsRouter;
