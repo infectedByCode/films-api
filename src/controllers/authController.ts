@@ -2,11 +2,15 @@ import { RequestHandler } from 'express';
 import { loginUser } from '../models/authModels';
 import { UserCred } from '../../common/apiTypes';
 
-export const postUserLogin: RequestHandler<{}, { token: string }, { userData: UserCred }> = async (req, res, next) => {
+export const postUserLogin: RequestHandler<{}, { token: string; userId: string }, { userData: UserCred }> = async (
+  req,
+  res,
+  next
+) => {
   const { userData } = req.body;
-  const maybeToken = await loginUser(userData);
-  if (maybeToken instanceof Error) {
-    return next(maybeToken);
+  const maybeAuthUser = await loginUser(userData);
+  if (maybeAuthUser instanceof Error) {
+    return next(maybeAuthUser);
   }
-  return res.send({ token: maybeToken.token });
+  return res.send({ token: maybeAuthUser.token, userId: maybeAuthUser.userId });
 };

@@ -9,6 +9,8 @@ import usersData from '../db/data/users.json';
 
 describe('/', () => {
   let authToken: string;
+  let uid: string;
+  let newUserData: { username: string; email: string; password: string };
   beforeAll(async () => {
     await db.seed.run();
     const userData = {
@@ -26,7 +28,9 @@ describe('/', () => {
           .send({ userData })
           .expect(200)
           .then(({ body }) => {
+            uid = body.userId;
             authToken = body.token;
+            newUserData = userData;
           });
       });
   });
@@ -282,6 +286,7 @@ describe('/', () => {
         test('GET:200, returns user data when passed a matched ID', () => {
           return request(app)
             .get(`/api/users/${userId}`)
+            .set('authorization', authToken)
             .expect(200)
             .then(({ body: { user } }) => {
               expect(user).toStrictEqual(usersData[0]);
@@ -289,50 +294,56 @@ describe('/', () => {
         });
         test('PATCH:200, updates a user email by ID', () => {
           return request(app)
-            .patch(`/api/users/${userId}`)
+            .patch(`/api/users/${uid}`)
+            .set('authorization', authToken)
             .send({ email: 'mynew@email.com' })
             .expect(200)
             .then(({ body: { msg } }) => {
-              expect(msg).toBe(`${userId} updated`);
+              expect(msg).toBe(`${uid} updated`);
               return request(app)
-                .get(`/api/users/${userId}`)
+                .get(`/api/users/${uid}`)
+                .set('authorization', authToken)
                 .expect(200)
                 .then(({ body: { user } }) => {
-                  const userCopy = Object.assign({}, usersData[0]);
+                  const userCopy = Object.assign({}, newUserData);
                   userCopy.email = 'mynew@email.com';
-                  expect(user).toStrictEqual(userCopy);
+                  expect(user.email).toEqual(userCopy.email);
                 });
             });
         });
         test('PATCH:400, returns an error if email is invalid format', () => {
           return request(app)
             .patch(`/api/users/${userId}`)
+            .set('authorization', authToken)
             .send({ email: { a: 123 } })
             .expect(400)
             .then(({ body: { msg } }) => {
               expect(msg).toBe('invalid or missing data');
             });
         });
+        test('DELETE:204, deletes a user by ID', () => {
+          return request(app)
+            .delete(`/api/users/${uid}`)
+            .set('authorization', authToken)
+            .expect(204)
+            .then(() => {
+              return request(app).get(`/api/users/${uid}`).set('authorization', authToken).expect(404);
+            });
+        });
         test('PATCH:404, returns an error if userId is not found', () => {
           return request(app)
-            .patch('/api/users/not-uuid')
+            .patch(`/api/users/${uid}`)
+            .set('authorization', authToken)
             .send({ email: 'email@me.com' })
             .expect(404)
             .then(({ body: { msg } }) => {
               expect(msg).toBe('not found');
             });
         });
-        test('DELETE:204, deletes a user by ID', () => {
-          return request(app)
-            .delete(`/api/users/${userId}`)
-            .expect(204)
-            .then(() => {
-              return request(app).get(`/api/users/${userId}`).expect(404);
-            });
-        });
         test('DELETE: 404, returns an error if userId not found', () => {
           return request(app)
-            .delete(`/api/users/not-here`)
+            .delete(`/api/users/${uid}`)
+            .set('authorization', authToken)
             .expect(404)
             .then(({ body: { msg } }) => {
               expect(msg).toBe('not found');
