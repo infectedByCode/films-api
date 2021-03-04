@@ -38,3 +38,11 @@ export const removeFilmById = async (filmId: string): Promise<number> => {
   const result = await db('films').delete().where('uid', filmId);
   return result;
 };
+
+export const fetchFilmsByUserId = async (userId: string): Promise<Film[]> => {
+  const result = await db('users_film_collections')
+    .leftJoin('films', { 'films.uid': 'users_film_collections.film_id' })
+    .select()
+    .where('user_id', userId);
+  return result;
+};

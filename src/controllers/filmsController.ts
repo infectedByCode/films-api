@@ -1,5 +1,12 @@
 import { RequestHandler } from 'express';
-import { selectFilms, selectFilmById, insertFilm, updateFilmById, removeFilmById } from '../models/filmModels';
+import {
+  selectFilms,
+  selectFilmById,
+  insertFilm,
+  updateFilmById,
+  removeFilmById,
+  fetchFilmsByUserId,
+} from '../models/filmModels';
 import { Film, RawFilm } from '../../common/apiTypes';
 
 export const getFilms: RequestHandler<{}, { films: Film[] }> = async (req, res, next) => {
@@ -54,4 +61,14 @@ export const deleteFilmById: RequestHandler<{ filmId: string }, {}> = async (req
     return next(Error('not found'));
   }
   return res.sendStatus(204);
+};
+
+export const getFilmsByUserId: RequestHandler<{ userId: string }, { userId: string; films: Film[] }> = async (
+  req,
+  res,
+  next
+) => {
+  const { userId } = req.params;
+  const films = await fetchFilmsByUserId(userId);
+  return res.send({ userId, films });
 };

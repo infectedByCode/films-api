@@ -205,6 +205,19 @@ describe('/', () => {
             });
         });
       });
+      describe('/users/:userId', () => {
+        it('GET:200, returns an array of films for a given user', () => {
+          return request(app)
+            .get(`/api/films/users/${uid}`)
+            .set('authorization', authToken)
+            .expect(200)
+            .then(({ body }) => {
+              console.log(body.films[0]);
+              expect(body).toHaveProperty('userId');
+              expect(body).toHaveProperty('films');
+            });
+        });
+      });
     });
     describe('/users', () => {
       test('POST:201, inserts new user when correct data is passed', () => {
