@@ -4,3 +4,12 @@ export interface FullUser {
   password: string;
   uuid: string;
 }
+
+export interface ErrorType {
+  message: string;
+}
+
+export interface ErrorResponder {
+  status: number;
+  msg: string;
+}
