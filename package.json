@@ -8,6 +8,10 @@
     "migrate-rollback": "NODE_ENV=development knex migrate:rollback",
     "seed": "knex seed:run",
     "start": "ts-node src/listen.ts",
+    "start:production": "npm run build && node dist/listen.js",
+    "docker:build": "docker build -t film-api .",
+    "docker:run": "docker run -e PORT=3000 -p 3000:3000 film-api",
+    "build": "tsc",
     "test": "jest"
   },
   "author": "Matthew Daley",

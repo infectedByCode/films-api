@@ -14,6 +14,11 @@ In order to run the project, you will need the following installed on your local
 
 - [NodeJS v12.x LTS](https://nodejs.org/en/)
 - [MySQL](https://www.mysql.com/)
+- [TypeScript](https://www.typescriptlang.org/download)
+
+Optional
+
+- [Docker](https://docs.docker.com/get-docker)
 
 ## Installing and Setup
 
@@ -24,25 +29,32 @@ Next, create a `.env` file in the root folder and add settings relevant to your 
 ```
 PORT=*PORT API RUNS*
 DB_HOST=*DB HOST, e.g. localhost for local db*
-DB_USER=*YOUR MYSQL USERNAME*
-DB_PW=*YOUR MYSQL PASSWORD*
+*DB_USER=*YOUR MYSQL USERNAME*
+*DB_PW=*YOUR MYSQL PASSWORD*
 DB_NAME="DESIRED DB NAME"
 DB_NAME_DEV="DESIRED DEV DB NAME"
 ```
+
+\*not needed for Mac users
 
 N.B. Should you rename the dbs, you will need to update the knex migration files found in `src/db/migrations`
 
 ## Running the API
 
+### Local development
+
 In your console, type `npm start` to run the API. The API should run on the port specified in the `.env` file.
 
-# TODOs
+### Production
 
-- Finish README 😃
-- Add auth middleware and update tests on protect routes
-  - Update type for auth handler to work with all routes
-- Improve error handling
-- Add cleanup of failed signup
-- Add config file
-- Add CORS / CSP protocol
-- Add functionality for films for a given user -> new table, add film if not exist (possibly using OMDBAPI / ROTTOM TOMATOES API?)
+To run transpile code locally, type `npm run start:production`. TSC (TypeScript Compiler) is required for this.
+
+#### Docker
+
+For docker, you can run `npm run docker:build` to create the container and `npm run docker:run` for starting the application.
+
+The port exposed is 3000, and this is passed into the application. Therefore, if you change the exposed port, you will be required to update the script.
+
+## Running tests
+
+Jest is used as the test runner and can be run from the console using `npm t` or `npm test` which will run all of the tests found. If you wish to restrict the tests to one file, you can use `npm test -t <filename regex>`.
