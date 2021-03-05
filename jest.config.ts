@@ -4,4 +4,5 @@ module.exports = {
   collectCoverage: true,
   collectCoverageFrom: ['**/*.ts', '!**/db/**', '!**/*.d.ts', '!**/listen.ts', '!**/knexfile.ts'],
   modulePathIgnorePatterns: ['src/db'],
+  testTimeout: 10000,
 };
