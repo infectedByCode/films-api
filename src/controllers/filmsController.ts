@@ -7,6 +7,7 @@ import {
   removeFilmById,
   fetchFilmsByUserId,
   insertFilmIdByUserId,
+  removeFilmByUserId,
 } from '../models/filmModels';
 import { Film, RawFilm } from '../../common/apiTypes';
 
@@ -83,4 +84,13 @@ export const postFilmIdByUserId: RequestHandler<{ userId: string }, {}, { filmId
   const { filmId } = req.body;
   await insertFilmIdByUserId(userId, filmId);
   return res.sendStatus(201);
+};
+
+export const deleteFilmByUserId: RequestHandler<{ filmId: string; userId: string }> = async (req, res, next) => {
+  const { userId, filmId } = req.params;
+  const result = await removeFilmByUserId(userId, filmId);
+  if (result === 0) {
+    return next(Error('not found'));
+  }
+  return res.sendStatus(204);
 };

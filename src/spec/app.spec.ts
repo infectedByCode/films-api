@@ -230,6 +230,19 @@ describe('/', () => {
               });
             });
         });
+        it('DELETE: 204, deletes a film from a users collection', () => {
+          return request(app)
+            .delete(`/api/films/${filmsData[0].uid}/users/${uid}`)
+            .set('authorization', authToken)
+            .expect(204)
+            .then(() => {
+              return request(app)
+                .get(`/api/films/users/${uid}`)
+                .set('authorization', authToken)
+                .expect(200)
+                .then(({ body }) => expect(body.films).toHaveLength(0));
+            });
+        });
       });
     });
     describe('/users', () => {

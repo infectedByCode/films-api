@@ -8,6 +8,7 @@ import {
   deleteFilmById,
   getFilmsByUserId,
   postFilmIdByUserId,
+  deleteFilmByUserId,
 } from '../controllers/filmsController';
 const filmsRouter = Router();
 
@@ -23,5 +24,6 @@ filmsRouter
   .get(checkAuth, getFilmsByUserId)
   .post(checkAuth, postFilmIdByUserId)
   .all(methodNotAllowedResponder);
+filmsRouter.route('/:filmId/users/:userId').delete(checkAuth, deleteFilmByUserId).all(methodNotAllowedResponder);
 
 export default filmsRouter;

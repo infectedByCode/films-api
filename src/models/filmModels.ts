@@ -51,3 +51,8 @@ export const insertFilmIdByUserId = async (userId: string, filmId: string): Prom
   const result = await db('users_film_collections').insert({ user_id: userId, film_id: filmId });
   return result;
 };
+
+export const removeFilmByUserId = async (userId: string, filmId: string): Promise<number> => {
+  const result = await db('users_film_collections').delete().where('user_id', userId).andWhere('film_id', filmId);
+  return result;
+};
