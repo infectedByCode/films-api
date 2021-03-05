@@ -1,11 +1,15 @@
-import express, { Request, Response, NextFunction, json, ErrorRequestHandler } from 'express';
+import express, { Request, Response, NextFunction, json } from 'express';
+
+import cors from 'cors';
 import dotenv from 'dotenv';
 import apiRouter from './routes/apiRouter';
 import { handleError } from './util/errorHandler';
 
 const app = express();
 dotenv.config();
+
 app.use(json());
+app.use(cors());
 
 app.get('/', (req: Request, res: Response, next: NextFunction) => {
   return res.send({ msg: 'OK' });
