@@ -13,7 +13,7 @@ export const loginUser = async (userData: {
     return new Error('not found');
   }
   try {
-    const userDetails = await db('user_creds').select('user_id', 'password').where('user_id', user?.uid);
+    const userDetails = await db('user_creds').select('user_id', 'password').where('user_id', user.uid);
     const match = await bcrypt.compare(password, userDetails[0].password);
     if (match) {
       const token = jwt.sign({ userId: user.uid }, 'secret', { expiresIn: '60m' });
