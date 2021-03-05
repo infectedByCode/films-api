@@ -82,7 +82,10 @@ export const postFilmIdByUserId: RequestHandler<{ userId: string }, {}, { filmId
 ) => {
   const { userId } = req.params;
   const { filmId } = req.body;
-  await insertFilmIdByUserId(userId, filmId);
+  const result = await insertFilmIdByUserId(userId, filmId);
+  if (result instanceof Error) {
+    return next(result);
+  }
   return res.sendStatus(201);
 };
 

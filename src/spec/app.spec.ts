@@ -206,14 +206,14 @@ describe('/', () => {
         });
       });
       describe('/users/:userId', () => {
-        it('POST:201, adds a film to a user', () => {
+        test('POST:201, adds a film to a user', () => {
           return request(app)
             .post(`/api/films/users/${uid}`)
             .set('authorization', authToken)
             .send({ filmId: filmsData[0].uid })
             .expect(201);
         });
-        it('GET:200, returns an array of films for a given user', () => {
+        test('GET:200, returns an array of films for a given user', () => {
           return request(app)
             .get(`/api/films/users/${uid}`)
             .set('authorization', authToken)
@@ -230,7 +230,41 @@ describe('/', () => {
               });
             });
         });
-        it('DELETE: 204, deletes a film from a users collection', () => {
+        test('POST:400, returns an error if film ID is malformed', () => {
+          return request(app)
+            .post(`/api/films/users/${uid}`)
+            .set('authorization', authToken)
+            .send({ filmId: {} })
+            .expect(400)
+            .then(({ body: { msg } }) => expect(msg).toBe('invalid or missing data'));
+        });
+        test('PUT:405, returns a 405 error for not allowed methods', () => {
+          return request(app)
+            .put(`/api/films/users/${uid}`)
+            .expect(405)
+            .then(({ body: { msg } }) => {
+              expect(msg).toBe('method not allowed');
+            });
+        });
+        test('PATCH:405, returns a 405 error for not allowed methods', () => {
+          return request(app)
+            .patch(`/api/films/users/${uid}`)
+            .expect(405)
+            .then(({ body: { msg } }) => {
+              expect(msg).toBe('method not allowed');
+            });
+        });
+        test('DELTE:405, returns a 405 error for not allowed methods', () => {
+          return request(app)
+            .delete(`/api/films/users/${uid}`)
+            .expect(405)
+            .then(({ body: { msg } }) => {
+              expect(msg).toBe('method not allowed');
+            });
+        });
+      });
+      describe('/:filmId/users/:userId', () => {
+        test('DELETE: 204, deletes a film from a users collection', () => {
           return request(app)
             .delete(`/api/films/${filmsData[0].uid}/users/${uid}`)
             .set('authorization', authToken)
@@ -241,6 +275,39 @@ describe('/', () => {
                 .set('authorization', authToken)
                 .expect(200)
                 .then(({ body }) => expect(body.films).toHaveLength(0));
+            });
+        });
+        test('DELETE: 404, returns an error if no film found for user', () => {
+          return request(app)
+            .delete(`/api/films/${filmsData[0].uid}/users/${uid}`)
+            .set('authorization', authToken)
+            .expect(404)
+            .then(({ body: { msg } }) => {
+              expect(msg).toBe('not found');
+            });
+        });
+        test('GET:405, returns a 405 error for not allowed methods', () => {
+          return request(app)
+            .get(`/api/films/${filmsData[0].uid}/users/${uid}`)
+            .expect(405)
+            .then(({ body: { msg } }) => {
+              expect(msg).toBe('method not allowed');
+            });
+        });
+        test('PATCH:405, returns a 405 error for not allowed methods', () => {
+          return request(app)
+            .patch(`/api/films/${filmsData[0].uid}/users/${uid}`)
+            .expect(405)
+            .then(({ body: { msg } }) => {
+              expect(msg).toBe('method not allowed');
+            });
+        });
+        test('PUT:405, returns a 405 error for not allowed methods', () => {
+          return request(app)
+            .put(`/api/films/${filmsData[0].uid}/users/${uid}`)
+            .expect(405)
+            .then(({ body: { msg } }) => {
+              expect(msg).toBe('method not allowed');
             });
         });
       });

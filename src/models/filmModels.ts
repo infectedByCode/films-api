@@ -47,9 +47,13 @@ export const fetchFilmsByUserId = async (userId: string): Promise<Film[]> => {
   return result;
 };
 
-export const insertFilmIdByUserId = async (userId: string, filmId: string): Promise<number[]> => {
-  const result = await db('users_film_collections').insert({ user_id: userId, film_id: filmId });
-  return result;
+export const insertFilmIdByUserId = async (userId: string, filmId: string): Promise<number[] | Error> => {
+  try {
+    const result = await db('users_film_collections').insert({ user_id: userId, film_id: filmId });
+    return result;
+  } catch (err) {
+    return err;
+  }
 };
 
 export const removeFilmByUserId = async (userId: string, filmId: string): Promise<number> => {
