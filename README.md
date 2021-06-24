@@ -55,6 +55,8 @@ For docker, you can run `npm run docker:build` to create the container and `npm 
 
 The port exposed is 3000, and this is passed into the application. Therefore, if you change the exposed port, you will be required to update the script.
 
+Note for docker, you will also need to pass database settings or create a container with a MySQL database.
+
 ## Running tests
 
 Jest is used as the test runner and can be run from the console using `npm t` or `npm test` which will run all of the tests found. If you wish to restrict the tests to one file, you can use `npm test -t <filename regex>`.
